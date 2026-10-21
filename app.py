@@ -190,12 +190,22 @@ def a2a_response(data: Any, status_code: int = 200) -> Response:
 
 def verify_a2a_headers(authorization: Optional[str], a2a_version: Optional[str]) -> str:
     if not authorization or not authorization.startswith("Bearer "):
-        raise HTTPException(status_code=401, detail="Unauthorized")
+        # Raise HTTP 401 cleanly
+        raise HTTPException(
+            status_code=401, 
+            detail={"error": {"code": "UNAUTHORIZED", "message": "Missing or invalid bearer token"}}
+        )
     token = authorization[len("Bearer ") :].strip()
     if not token:
-        raise HTTPException(status_code=401, detail="Unauthorized")
+        raise HTTPException(
+            status_code=401, 
+            detail={"error": {"code": "UNAUTHORIZED", "message": "Empty token"}}
+        )
     if a2a_version != "1.0":
-        raise HTTPException(status_code=400, detail="Unsupported or missing A2A-Version")
+        raise HTTPException(
+            status_code=400, 
+            detail={"error": {"code": "BAD_REQUEST", "message": "Unsupported or missing A2A-Version"}}
+        )
     return token
 
 
