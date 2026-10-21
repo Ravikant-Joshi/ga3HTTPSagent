@@ -342,6 +342,7 @@ Return a JSON object: {"decisions": [{"idx": <int>, "action": "...", "facts": {.
 
 
 @app.post("/a2a/message:send")
+@app.post("/a2a/message%3Asend")
 async def a2a_message_send(
     request: Request,
     authorization: Optional[str] = Header(None),
